@@ -1,0 +1,56 @@
+body {
+  /* #1c1c1c*/
+  background-color: #292929;
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+main {
+  background-color: #585070;
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: -webkit-fill-available;
+}
+
+#playersTitle {
+  /*background: whitesmoke;*/
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  font-family: monospace;
+  font-size: 16px;
+  padding: 0.25rem;
+  width: 100%;
+}
+
+#playersTitle > span {
+  margin: 0 1rem;
+  padding: 0.25rem;
+}
+
+.blackFigures {
+  background-color: black;
+  color: white;
+}
+.whiteFigures {
+  background-color: white;
+  color: black;
+}
+
+canvas {
+  margin: 0.5rem;
+  background-color: #545454;
+  border-radius: 5px;
+  box-shadow: 0 4px 3px 0 #212121a8;
+}
+
+button {
+  width: fit-content;
+}
