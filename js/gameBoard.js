@@ -90,10 +90,17 @@ const Chess = {
       return moveList;
     },
     knight: (owner, cell, board) => {
-      const moveList = [];
-
-
-      return moveList;
+      const { y, x } = cell;
+      // Г L pattern move
+      return [
+        //mid-left  top-left    top-right   mid-right
+        [y-1, x-2], [y-2, x-1], [y-2, x+1], [y-1, x+2],
+        //mid-bt-left  bt-left  bt-right  mid-bt-right,
+        [y+1, x-2], [y+2, x-1], [y+2, x+1], [y+1, x+2]
+      ]
+        .map(([yIndex, xIndex]) => board.getCell(yIndex, xIndex))
+        .filter(c => !!c?.id)
+        .filter(c => c.item.owner !== owner);
     },
     bishop: (owner, cell, board) => { return []; },
     queen: (owner, cell, board) => { return []; },

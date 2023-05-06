@@ -19,7 +19,7 @@ function createGrid(ROWS = 1, COLS = 1, CellSize = 32) {
       return BODY;
     },
     getCell: (y, x) => {
-      if(y >= ROWS || x >= COLS) return {};
+      if(y < 0 || x < 0 || y >= ROWS || x >= COLS) return {};
       return _data[y][x];
     },
     size: () => [ROWS, COLS], // [y, x]

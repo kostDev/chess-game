@@ -42,7 +42,7 @@ function preload() {
 function setup() {
   let canv = createCanvas(w, h);
   canv.parent('app')
-  frameRate(12);
+  frameRate(10);
   // pixelDensity(2);
   settings.boardX = settings.paddingX - settings.cellSize * 0.75;
   settings.boardY = settings.paddingY - settings.cellSize * 0.55;
