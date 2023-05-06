@@ -34,8 +34,8 @@ class PlayerEntity {
   }
 
   move() {
+    if(!this.canMove) return;
     if(
-      this.canMove &&
       mouseX >= settings.paddingX && mouseX < gameBoard.width &&
       mouseY >= settings.paddingY && mouseY < gameBoard.height
     ) {
@@ -62,6 +62,10 @@ class PlayerEntity {
         const nextPosName = gameBoard.getPositionName(nextCell);
         // check if is it existing cell for move
         if(!!this.target.variantMoves.find(c => c.id === nextCell.id)) {
+          // check if nextFigure king
+          if(item.name === 'king') {
+            this.win = true;
+          }
           // from - to
           const step = `${this.name}: ${currFigure}${currPosName} -> ${nextFigure}${nextPosName}`;
           // add in ui
@@ -70,10 +74,6 @@ class PlayerEntity {
           Object.assign(nextCell.item, currCell.item)
           // clear target curr cell.item to default emptyCellItem
           Object.assign(currCell.item, settings.emptyCellItem);
-          // check if nextFigure king
-          if(nextCell.item.name === 'king') {
-            this.win = true;
-          }
           // clear ref on a cell in a board
           this.target.curr = null;
           this.target.variantMoves = [];
