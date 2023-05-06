@@ -55,13 +55,18 @@ class PlayerEntity {
         currCell && currCell.id !== nextCell.id &&
         (!item.owner || item.owner !== this.owner)
       ) {
-        const currentFigure = (item.owner || '') + item.name;
-        const currentNamePos = gameBoard.getPositionName(currCell);
-        const nextNamePos = gameBoard.getPositionName(nextCell);
+        const currFigure = currCell.item.name[0].toUpperCase();
+        const nextFigure = item.name ? nextCell.item.name[0].toUpperCase() : '';
+        const currPosName = gameBoard.getPositionName(currCell);
+        const nextPosName = gameBoard.getPositionName(nextCell);
         // check if is it existing cell for move
         if(!!this.target.variantMoves.find(c => c.id === nextCell.id)) {
           // from - to
-          console.log(`${currentFigure} ${currentNamePos} -> ${nextNamePos}`);
+          const step = `${this.name}: ${currFigure}${currPosName} -> ${nextFigure}${nextPosName}`;
+          // add in ui
+          addHistoryItem(this.owner, step);
+
+          // console.log(step);
           Object.assign(nextCell.item, currCell.item)
           // clear target curr cell to empty
           Object.assign(currCell.item, settings.emptyCellItem);

@@ -1,5 +1,13 @@
+const historyUI = document.getElementById('gameHistory');
 const playerTitleUI = document.getElementById('playerTitleColor');
 const cpuTitleUI = document.getElementById('cpuTitleColor');
+
+const addHistoryItem = (owner, stepStr) => {
+  const span = document.createElement('span');
+  span.classList.add(owner+'Figures');
+  span.innerText = stepStr;
+  historyUI.prepend(span);
+}
 
 const w = 680, h = 680;
 
