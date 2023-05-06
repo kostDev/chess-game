@@ -134,7 +134,11 @@ const Chess = {
       });
       return moves;
     },
-    queen: (owner, cell, board) => { return []; },
+    queen: (owner, cell, board) => {
+      const fromRookMoveSet = Chess.moves.rook(owner, cell, board);
+      const fromBishopMoveSet = Chess.moves.bishop(owner, cell, board);
+      return [...fromRookMoveSet, ...fromBishopMoveSet];
+    },
     king: (owner, cell, board) => { return []; },
   }
 }
