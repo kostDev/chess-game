@@ -5,7 +5,8 @@ class PlayerEntity {
     // black white
     this.owner = ownerColor;
     this.board = board;
-    this.figures = 16; // rewrite with good logic for icons
+    this.win = false;
+    this.figures = 16; // TODO: impl logic for store figures which out
     this.target = {
       curr: null,
       variantMoves: []
@@ -65,11 +66,14 @@ class PlayerEntity {
           const step = `${this.name}: ${currFigure}${currPosName} -> ${nextFigure}${nextPosName}`;
           // add in ui
           addHistoryItem(this.owner, step);
-
-          // console.log(step);
+          // console.log(step); move item data to the next cell
           Object.assign(nextCell.item, currCell.item)
-          // clear target curr cell to empty
+          // clear target curr cell.item to default emptyCellItem
           Object.assign(currCell.item, settings.emptyCellItem);
+          // check if nextFigure king
+          if(nextCell.item.name === 'king') {
+            this.win = true;
+          }
           // clear ref on a cell in a board
           this.target.curr = null;
           this.target.variantMoves = [];

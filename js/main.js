@@ -77,6 +77,16 @@ function draw() {
 
   gameBoard.drawFigures();
 
+
+  gameBoard.checkWinner((winner) => {
+    const str = `👑 ${winner.name} win!`;
+    fill('rgba(199,199,199,0.69)');
+    rect(0, 0, w, h);
+    textSize(66);
+    fill('#000');
+    text(str, w/2-(str.length*20), h/2)
+    noLoop();
+  });
   // noLoop();
 }
 

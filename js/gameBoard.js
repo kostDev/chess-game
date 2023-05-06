@@ -261,5 +261,10 @@ function GameBoard(rows, cols, cellSize) {
     }
   }
 
+  grid.checkWinner = (drawWinner) => {
+    first_player.win && drawWinner(first_player);
+    second_player.win && drawWinner(second_player);
+  }
+
   return grid;
 }
