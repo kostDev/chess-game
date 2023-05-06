@@ -10,10 +10,10 @@
 
 #### TODO:
 
-1. [x] Movements: `done`
+1. [x] Movements
 2. [ ] `Improve`: Batch start & ui selection
 3. [ ] `Add`: End Game / New Batch
-4. [ ] `Add`: Batch History
+4. [x] `Add`: Batch History
 5. [ ] `Add`: (Options) `1vs1` and `1vsCPU` and `1vsAI`
 6. [ ] `create` AI tensorflow
 7. [ ] `Refactoring` :)))
