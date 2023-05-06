@@ -10,10 +10,10 @@
 
 #### TODO:
 
-1. [ ] Movements for: `Queen` `King`
-2. [ ] `Improve`: Batch logic
-3. [ ] `Add`: Batch History 
-4. [ ] `Add`: End Game / New Batch
+1. [x] Movements: `done`
+2. [ ] `Improve`: Batch start & ui selection
+3. [ ] `Add`: End Game / New Batch
+4. [ ] `Add`: Batch History
 5. [ ] `Add`: (Options) `1vs1` and `1vsCPU` and `1vsAI`
 6. [ ] `create` AI tensorflow
 7. [ ] `Refactoring` :)))

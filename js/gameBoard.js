@@ -100,7 +100,7 @@ const Chess = {
       ]
         .map(([yIndex, xIndex]) => board.getCell(yIndex, xIndex))
         .filter(_cell => !!_cell?.id)
-        .filter(_cell => board.isOwnerCell(_cell, owner));
+        .filter(_cell => !board.isOwnerCell(_cell, owner));
     },
     bishop: (owner, cell, board) => {
       const moves = [];
@@ -139,7 +139,17 @@ const Chess = {
       const fromBishopMoveSet = Chess.moves.bishop(owner, cell, board);
       return [...fromRookMoveSet, ...fromBishopMoveSet];
     },
-    king: (owner, cell, board) => { return []; },
+    king: (owner, cell, board) => {
+      const { y, x } = cell;
+      return [
+        [y-1, x-1], [y-1, x], [y-1, x+1],
+        [y,   x-1] /*[y,x]*/, [y,   x+1],
+        [y+1, x-1], [y+1, x], [y+1, x+1]
+      ]
+        .map(([yIndex, xIndex]) => board.getCell(yIndex, xIndex))
+        .filter(_cell => !!_cell?.id)
+        .filter(_cell => board.isEmptyCell(_cell) || board.isEnemyCell(_cell, owner));
+    },
   }
 }
 
