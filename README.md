@@ -10,7 +10,7 @@
 
 #### TODO:
 
-1. [ ] Movements for: `knight` `bishop` `Queen` `King`
+1. [ ] Movements for: `Queen` `King`
 2. [ ] `Improve`: Batch logic
 3. [ ] `Add`: Batch History 
 4. [ ] `Add`: End Game / New Batch

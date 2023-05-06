@@ -99,10 +99,41 @@ const Chess = {
         [y+1, x-2], [y+2, x-1], [y+2, x+1], [y+1, x+2]
       ]
         .map(([yIndex, xIndex]) => board.getCell(yIndex, xIndex))
-        .filter(c => !!c?.id)
-        .filter(c => c.item.owner !== owner);
+        .filter(_cell => !!_cell?.id)
+        .filter(_cell => board.isOwnerCell(_cell, owner));
     },
-    bishop: (owner, cell, board) => { return []; },
+    bishop: (owner, cell, board) => {
+      const moves = [];
+      const { y, x } = cell;
+      // [y,x, yDir, xDir]
+      const startPosArr = [
+        // diagonals left, right, bt-left, bt-right
+        [y-1, x-1, -1, -1], [y-1, x+1, -1, 1],
+        [y+1, x-1,  1, -1], [y+1, x+1,  1, 1]
+      ];
+      startPosArr.forEach(([_y, _x, yDir, xDir]) => {
+        // let _y = yIndex, _x = xIndex;
+        while(true) {
+          const isOutFromStartPos = _y < 0 || _x < 0;
+          const isOutFromEndPos = _y >= settings.cellsPerLine || _x >= settings.cellsPerLine;
+          const currCell = board.getCell(_y, _x);
+
+          if(isOutFromStartPos || isOutFromEndPos || board.isOwnerCell(currCell, owner)) break;
+          if(board.isEmptyCell(currCell)) {
+            moves.push(currCell);
+          }
+          else if (board.isEnemyCell(currCell, owner)) {
+            moves.push(currCell);
+            break;
+          }
+          // ------------------------------------
+          _y += yDir;
+          _x += xDir;
+        }
+        // end cells loop
+      });
+      return moves;
+    },
     queen: (owner, cell, board) => { return []; },
     king: (owner, cell, board) => { return []; },
   }
@@ -193,12 +224,11 @@ function GameBoard(rows, cols, cellSize) {
     });
   }
 
-  grid.isEmptyCell = (cell) => {
-    return cell && !cell?.item?.owner
-  }
+  grid.isEmptyCell = (cell) => cell && !cell?.item?.owner
   grid.isEnemyCell = (cell, owner) => {
     return cell && cell?.item?.owner && cell.item.owner !== owner;
   }
+  grid.isOwnerCell = (cell = {}, owner) => cell?.item && cell?.item.owner === owner;
 
   grid.getPositionName = (cell) => Chess.rowNames[cell.y] + Chess.columnNames[cell.x];
   grid.start = (firstPlayer, secondPlayer) => {
