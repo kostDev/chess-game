@@ -1,165 +1,8 @@
-const Chess = {
-  tileWidth: 106.5,
-  tileHeight: 106.5,
-  tilePos: {
-    // name  white[x,y] - black [x,y]
-    pawn:   [[533.0, 0], [533.0, 106.5]],
-    rook:   [[426.4, 0], [426.4, 106.5]],
-    knight: [[319.7, 0], [319.7, 106.5]],
-    bishop: [[213.2, 0], [213.2, 106.5]],
-    queen:  [[106.6, 0], [106.6, 106.5]],
-    king:   [[0,     0], [0,     106.5]],
-  },
-  names: [
-    ['rook','knight','bishop','queen', 'king', 'bishop', 'knight','rook'],
-    ['pawn','pawn','pawn','pawn','pawn','pawn','pawn','pawn']
-  ],
-  rowNames: '87654321'.split(''),
-  columnNames: 'abcdefgh'.toUpperCase().split(''),
-  moves: {
-    pawn: (owner, cell, board) => {
-      const moveList = []
-      const direction =  owner === 'white' ? -1 : 1;
-      const nextCell = board.getCell(cell.y + direction, cell.x);
-      // diagonals move
-      const nextCellD1 = board.getCell(cell.y + direction, cell.x+direction);
-      const nextCellD2 = board.getCell(cell.y + direction, cell.x-direction);
 
-      if(board.isEmptyCell(nextCell)) {
-        moveList.push(nextCell);
-      }
-      if(board.isEnemyCell(nextCellD1, owner)) {
-        moveList.push(nextCellD1);
-      }
-      if(board.isEnemyCell(nextCellD2, owner)) {
-        moveList.push(nextCellD2);
-      }
-
-      return moveList;
-    },
-    rook: (owner, cell, board) => {
-      const moveList = [];
-      // let y = cell.y, x = cell.x;
-      // vertical y +-
-      for(let y = cell.y+1; y <= settings.cellsPerLine-1; y++) {
-        const nextCell = board.getCell(y, cell.x)
-        if(board.isEmptyCell(nextCell)) {
-          moveList.push(nextCell);
-        }
-        else if(board.isEnemyCell(nextCell, owner)) {
-          moveList.push(nextCell);
-          break;
-        }
-        else break;
-      }
-      for(let y = cell.y-1; y >= 0; y--) {
-        const nextCell = board.getCell(y, cell.x)
-        if(board.isEmptyCell(nextCell)) {
-          moveList.push(nextCell);
-        }
-        else if(board.isEnemyCell(nextCell, owner)) {
-          moveList.push(nextCell);
-          break;
-        }
-        else break;
-      }
-      // horizontal x +-
-      for(let x = cell.x+1; x <= settings.cellsPerLine-1; x++) {
-        const nextCell = board.getCell(cell.y, x)
-        if(board.isEmptyCell(nextCell)) {
-          moveList.push(nextCell);
-        }
-        else if(board.isEnemyCell(nextCell, owner)) {
-          moveList.push(nextCell);
-          break;
-        }
-        else break;
-      }
-      for(let x = cell.x-1; x >= 0; x--) {
-        const nextCell = board.getCell(cell.y, x)
-        if(board.isEmptyCell(nextCell)) {
-          moveList.push(nextCell);
-        }
-        else if(board.isEnemyCell(nextCell, owner)) {
-          moveList.push(nextCell);
-          break;
-        }
-        else break;
-      }
-
-      return moveList;
-    },
-    knight: (owner, cell, board) => {
-      const { y, x } = cell;
-      // Г L pattern move
-      return [
-        //mid-left  top-left    top-right   mid-right
-        [y-1, x-2], [y-2, x-1], [y-2, x+1], [y-1, x+2],
-        //mid-bt-left  bt-left  bt-right  mid-bt-right,
-        [y+1, x-2], [y+2, x-1], [y+2, x+1], [y+1, x+2]
-      ]
-        .map(([yIndex, xIndex]) => board.getCell(yIndex, xIndex))
-        .filter(_cell => !!_cell?.id)
-        .filter(_cell => !board.isOwnerCell(_cell, owner));
-    },
-    bishop: (owner, cell, board) => {
-      const moves = [];
-      const { y, x } = cell;
-      // [y,x, yDir, xDir]
-      const startPosArr = [
-        // diagonals left, right, bt-left, bt-right
-        [y-1, x-1, -1, -1], [y-1, x+1, -1, 1],
-        [y+1, x-1,  1, -1], [y+1, x+1,  1, 1]
-      ];
-      startPosArr.forEach(([_y, _x, yDir, xDir]) => {
-        // let _y = yIndex, _x = xIndex;
-        while(true) {
-          const isOutFromStartPos = _y < 0 || _x < 0;
-          const isOutFromEndPos = _y >= settings.cellsPerLine || _x >= settings.cellsPerLine;
-          const currCell = board.getCell(_y, _x);
-
-          if(isOutFromStartPos || isOutFromEndPos || board.isOwnerCell(currCell, owner)) break;
-          if(board.isEmptyCell(currCell)) {
-            moves.push(currCell);
-          }
-          else if (board.isEnemyCell(currCell, owner)) {
-            moves.push(currCell);
-            break;
-          }
-          // ------------------------------------
-          _y += yDir;
-          _x += xDir;
-        }
-        // end cells loop
-      });
-      return moves;
-    },
-    queen: (owner, cell, board) => {
-      const fromRookMoveSet = Chess.moves.rook(owner, cell, board);
-      const fromBishopMoveSet = Chess.moves.bishop(owner, cell, board);
-      return [...fromRookMoveSet, ...fromBishopMoveSet];
-    },
-    king: (owner, cell, board) => {
-      const { y, x } = cell;
-      return [
-        [y-1, x-1], [y-1, x], [y-1, x+1],
-        [y,   x-1] /*[y,x]*/, [y,   x+1],
-        [y+1, x-1], [y+1, x], [y+1, x+1]
-      ]
-        .map(([yIndex, xIndex]) => board.getCell(yIndex, xIndex))
-        .filter(_cell => !!_cell?.id)
-        .filter(_cell => board.isEmptyCell(_cell) || board.isEnemyCell(_cell, owner));
-    },
-  }
-}
 
 
 function GameBoard(rows, cols, cellSize) {
-  let first_player, second_player;
-  const playerMove = {
-    white: true,
-    black: false
-  }
+  let player1, player2;
   const grid =
     createGrid(rows, cols, cellSize)
     .each(cell => {
@@ -238,32 +81,36 @@ function GameBoard(rows, cols, cellSize) {
     });
   }
 
-  grid.isEmptyCell = (cell) => cell && !cell?.item?.owner
-  grid.isEnemyCell = (cell, owner) => {
-    return cell && cell?.item?.owner && cell.item.owner !== owner;
-  }
-  grid.isOwnerCell = (cell = {}, owner) => cell?.item && cell?.item.owner === owner;
+  grid.isEmptyCell = (c) => c && !c?.item?.owner
+  grid.isEnemyCell = (c, owner) => c && c?.item?.owner && c.item.owner !== owner;
+  grid.isOwnerCell = (c, owner) => c && c?.item && c?.item.owner === owner;
 
   grid.getPositionName = (cell) => Chess.rowNames[cell.y] + Chess.columnNames[cell.x];
-  grid.start = (firstPlayer, secondPlayer) => {
-    first_player = firstPlayer;
-    second_player = secondPlayer
-    // white or black
-    firstPlayer.canMove = playerMove[firstPlayer.owner];
-    secondPlayer.canMove = playerMove[secondPlayer.owner];
+  grid.start = (p1, p2) => {
+    player1 = p1;
+    player2 = p2;
+    // ['white'] or ['black']
+    player1.canMove = Chess.firstMove[player1.owner];
+    player2.canMove = Chess.firstMove[player2.owner];
   }
   grid.nextPlayer = (prevPlayer) => {
     prevPlayer.canMove = false;
-    if(first_player.owner === prevPlayer.owner) {
-      second_player.canMove = true;
+    if(player1.owner === prevPlayer.owner) {
+      player2.canMove = true;
     } else {
-      first_player.canMove = true;
+      player1.canMove = true;
     }
   }
 
   grid.checkWinner = (drawWinner) => {
-    first_player.win && drawWinner(first_player);
-    second_player.win && drawWinner(second_player);
+    if(player1.win) {
+      player1.winCounter++;
+      drawWinner(player1)
+    }
+    else if(player2.win) {
+      player2.winCounter++;
+      drawWinner(player2)
+    }
   }
 
   return grid;

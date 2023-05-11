@@ -6,6 +6,7 @@ class PlayerEntity {
     this.owner = ownerColor;
     this.board = board;
     this.win = false;
+    this.winCounter = 0;
     this.figures = 16; // TODO: impl logic for store figures which out
     this.target = {
       curr: null,

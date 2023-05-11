@@ -18,9 +18,9 @@ function createGrid(ROWS = 1, COLS = 1, CellSize = 32) {
       console.log(_data);
       return BODY;
     },
-    getCell: (y, x) => {
-      if(y < 0 || x < 0 || y >= ROWS || x >= COLS) return {};
-      return _data[y][x];
+    getCell: (yIndex, xIndex) => {
+      if(yIndex < 0 || xIndex < 0 || yIndex >= ROWS || xIndex >= COLS) return null;
+      return _data[yIndex][xIndex];
     },
     size: () => [ROWS, COLS], // [y, x]
     total: () => _totalCells,

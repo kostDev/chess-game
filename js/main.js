@@ -1,6 +1,6 @@
 const historyUI = document.getElementById('gameHistory');
-const playerTitleUI = document.getElementById('playerTitleColor');
-const cpuTitleUI = document.getElementById('cpuTitleColor');
+const playerTitleUI = document.getElementById('player1TitleColor');
+const cpuTitleUI = document.getElementById('player2TitleColor');
 
 const addHistoryItem = (owner, stepStr) => {
   const span = document.createElement('span');
@@ -9,46 +9,16 @@ const addHistoryItem = (owner, stepStr) => {
   historyUI.prepend(span);
 }
 
-const w = 680, h = 680;
-
-const settings = {
-  bg: "#fff", // rgb(162, 144, 214)
-  fieldColors: ['#ebd1a6' , '#c2924a'],
-  targetCurrColor: '#4ac252',
-  enemyVariantColor: '#c24e4a',
-
-  owners: ['black', 'white'],
-  textColor: "black",
-
-  textSize: 24,
-
-  boardBg: "#fff",
-  boardX: 0, // init setup
-  boardY: 0, // init setup
-  boardSize: 0, // init setup
-  // cell template
-  emptyCellItem: {
-    iconType: null,
-    owner: '',
-    name: '',
-    tilePos: []
-  },
-  cellSize: 72,
-  cellsPerLine: 8,
-  paddingX: 54,
-  paddingY: 38,
-}
-
 let gameBoard = null;
 let chassesImg = null;
-let player = null, cpu = null;
+let player1 = null, player2 = null;
 
 function preload() {
   chassesImg = loadImage('./assets/chess2.png')
 }
 
 function setup() {
-  let canv = createCanvas(w, h);
+  const canv = createCanvas(w, h);
   canv.parent('app')
   frameRate(10);
   // pixelDensity(2);
@@ -58,22 +28,22 @@ function setup() {
 
   gameBoard = GameBoard(settings.cellsPerLine, settings.cellsPerLine, settings.cellSize)
 
-  const ownersColors = shuffle(settings.owners);
+  const [figureColor1, figureColor2] = shuffle(settings.owners);
 
-  player = new PlayerEntity('dev', ownersColors[0], gameBoard, playerTitleUI);
-  cpu = new PlayerEntity('cpu', ownersColors[1], gameBoard, cpuTitleUI);
+  player1 = new PlayerEntity('dev', figureColor1, gameBoard, playerTitleUI);
+  player2 = new PlayerEntity('cpu', figureColor2, gameBoard, cpuTitleUI);
 
-  gameBoard.start(player, cpu)
+  gameBoard.start(player1, player2)
 }
 
 function draw() {
   background(settings.bg);
-  textFont('monospace');
+  textFont(settings.textFont);
   gameBoard.drawBorder();
   gameBoard.drawCells();
-  // target
-  player.drawSelected();
-  cpu.drawSelected();
+  // TODO: rewrite: call from gameBoard
+  player1.drawSelected();
+  player2.drawSelected();
 
   gameBoard.drawFigures();
 
@@ -89,6 +59,7 @@ function draw() {
 }
 
 function mousePressed() {
-  player.move();
-  cpu.move();
+  // TODO: rewrite: call from gameBoard
+  player1.move();
+  player2.move();
 }

@@ -6,17 +6,17 @@
   <title>Chess Game</title>
   <link rel="stylesheet" href="./css/index.css">
   <script src="./lib/p5.js"></script>
+  <script src="./js/createGrid.js"></script>
+  <script src="./js/consts.js"></script>
 </head>
 <body>
-  <div id="gameHistory">
-    <!--    -->
-  </div>
+  <div id="gameHistory"></div>
   <div id="playersTitle">
-    <span id="playerTitleColor"></span>
-    <span id="cpuTitleColor"></span>
+    <span id="player1TitleColor">player 1</span>
+    <span>vs</span>
+    <span id="player2TitleColor">player 2</span>
   </div>
   <main id="app"></main>
-  <script src="./js/createGrid.js"></script>
   <script src="./js/gameBoard.js"></script>
   <script src="./js/playerEntity.js"></script>
   <script src="./js/main.js"></script>
