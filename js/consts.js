@@ -1,6 +1,7 @@
 const w = 680, h = 680;
 
 const settings = {
+  fps: 10,
   bg: "#fff", // rgb(162, 144, 214)
   fieldColors: ['#ebd1a6' , '#c2924a'],
   targetCurrColor: '#4ac252',
